@@ -1,5 +1,13 @@
-function App() {
-	return <div className='App'>hi</div>;
-}
+import Router from './routes/Router';
+import Nav from './routes/Nav';
+
+const App = () => {
+	return (
+		<>
+			<Nav />
+			<Router />
+		</>
+	);
+};
 
 export default App;

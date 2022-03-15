@@ -9,8 +9,8 @@
     "node_modules": true,
     // ".gitignore": true,
     "package-lock.json": true,
-    "README.md": true,
-    "public": true,
+    // "README.md": true,
+    // "public": true,
     // "package.json": true,
   }
 }
