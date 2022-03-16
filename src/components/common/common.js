@@ -18,6 +18,7 @@ export const CsBox = styled.div`
 	padding: 35px 40px 25px 40px;
 `;
 export const CsButton = styled.input`
+	cursor: ${({disabled}) => (disabled ? 'default' : 'pointer')};
 	width: 100%;
 	margin-top: 22px;
 	background-color: ${({theme}) => theme.buttonBlue};
@@ -26,6 +27,7 @@ export const CsButton = styled.input`
 	padding: 8px 0px;
 	border: none;
 	font-weight: 500;
+	opacity: ${({disabled}) => disabled && 0.4};
 `;
 
 export const CsSepreator = styled.div`
@@ -68,7 +70,7 @@ export const CsInput = styled.input`
 	border-radius: 3px;
 	padding: 10px 7px;
 	background-color: #fafafa;
-	border: 0.5px solid ${({theme}) => theme.borderGrey};
+	border: 0.5px solid ${({theme, hasError}) => (hasError ? 'red' : theme.borderGrey)};
 	margin-top: 10px;
 	box-sizing: border-box;
 `;
@@ -93,4 +95,18 @@ export const CsSpan = styled.span`
 	line-height: 15px;
 	font-weight: 300;
 	font-size: 10px;
+	color: ${({color}) => color};
+`;
+
+export const CsSpanF = ({text, color}, props) => {
+	return (
+		<CsSpan color={color} {...props}>
+			{text}
+		</CsSpan>
+	);
+};
+
+export const CsErrors = styled.div`
+	display: flex;
+	flex-direction: column;
 `;

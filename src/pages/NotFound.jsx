@@ -1,7 +1,13 @@
 import React from 'react';
+import {PageTitle} from '../utils/PageTitle';
 
 const NotFound = () => {
-	return <div>NotFound</div>;
+	return (
+		<div>
+			<PageTitle title={'Instagram | NotFound'} />
+			NotFound
+		</div>
+	);
 };
 
 export default NotFound;

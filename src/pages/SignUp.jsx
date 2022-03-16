@@ -2,11 +2,13 @@ import {faInstagram} from '@fortawesome/free-brands-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {Link} from 'react-router-dom';
 import {CsButton, CsInput, CsTopBox, CsWrapper, CsSpan, CsContainer, CsButtomBox} from '../components/common/common';
+import {PageTitle} from '../utils/PageTitle';
 
 const SignUp = () => {
 	return (
 		<CsContainer>
 			<CsWrapper>
+				<PageTitle title={'Instagram | Sign Up '} />
 				<CsTopBox>
 					<div>
 						<FontAwesomeIcon icon={faInstagram} size={'3x'} />
