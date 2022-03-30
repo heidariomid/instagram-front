@@ -1,4 +1,13 @@
+import {faUser} from '@fortawesome/free-regular-svg-icons';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import styled from 'styled-components';
+
+export const CsMain = styled.main`
+	max-width: 930px;
+	width: 100%;
+	margin: 0 auto;
+	margin-top: 45px;
+`;
 export const CsContainer = styled.div`
 	display: flex;
 	height: 100vh;
@@ -110,3 +119,26 @@ export const CsErrors = styled.div`
 	display: flex;
 	flex-direction: column;
 `;
+export const CsBold = styled.span`
+	font-weight: 600;
+`;
+
+const CsImg = styled.img`
+	width: ${({size}) => (size === 'large' ? '35px' : '25px')};
+	height: ${({size}) => (size === 'large' ? '35px' : '25px')};
+	border-radius: 50%;
+	overflow: hidden;
+`;
+
+export const CsAvatarF = ({url = '', size}) => {
+	if (url) {
+		const URL = url?.split('//');
+
+		return <CsImg size={size} src={'http://127.0.0.1:8887/' + URL[1]} alt={'avatar'} />;
+	}
+	return (
+		<CsSpan>
+			<FontAwesomeIcon icon={faUser} size='2x' />
+		</CsSpan>
+	);
+};

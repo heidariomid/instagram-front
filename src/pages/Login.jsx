@@ -1,54 +1,53 @@
 import {gql, useMutation} from '@apollo/client';
 import {faFacebookSquare, faInstagram} from '@fortawesome/free-brands-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {useEffect} from 'react';
 import {useForm} from 'react-hook-form';
+import {useHistory} from 'react-router-dom';
+import {useLocation} from 'react-router-dom';
 import {Link} from 'react-router-dom';
-import {client, isLoginVar} from '../apollo';
-import {CsButton, CsInput, CsSepreator, CsTopBox, CsWrapper, CsSpan, CsContainer, CsButtomBox, CsSpanF, CsErrors} from '../components/common/common';
-import Loader from '../components/Loader/Loader';
+import {isLoginVar} from '../apollo';
+import {CsButton, CsSpan, CsInput, CsSepreator, CsTopBox, CsWrapper, CsContainer, CsButtomBox, CsSpanF, CsErrors} from '../styles/common';
+import {LOGIN_MUTATION} from '../graphql/mutations';
 import {PageTitle} from '../utils/PageTitle';
 
 const Login = () => {
+	const {state} = useLocation();
+	const history = useHistory();
+
 	const {
 		register,
-		watch,
 		getValues,
 		formState: {errors, isValid},
 		handleSubmit,
 		setError,
 		clearErrors,
-	} = useForm({mode: 'onChange'});
+	} = useForm({
+		mode: 'onChange',
+		defaultValues: {
+			email: state?.email || '',
+			password: state?.password || '',
+		},
+	});
 
-	const LOGIN_MUTATION = gql`
-		mutation ($email: String!, $password: String!) {
-			userLogin(email: $email, password: $password) {
-				isLoginSuccess
-				error
-				message
-				token
-			}
-		}
-	`;
 	const onCompleted = (data) => {
-		const {isLoginSuccess, error, message, token} = data.userLogin;
+		const {isLoginSuccess, error, token} = data.userLogin;
 		if (!isLoginSuccess) {
 			setError('loginAuth', {message: error});
 		}
 		if (token) {
 			localStorage.setItem('token', token);
-
 			isLoginVar(true);
+			history.push('/');
 		}
 	};
 	const [loginHandler, {loading}] = useMutation(LOGIN_MUTATION, {onCompleted});
 
 	const onValidSubmit = (data) => {
 		if (loading) return;
-		const {username, password} = getValues();
+		const {email, password} = getValues();
 		loginHandler({
 			variables: {
-				email: username,
+				email,
 				password,
 			},
 		});
@@ -56,7 +55,7 @@ const Login = () => {
 	const onInValidSubmit = (data) => {
 		console.log(data);
 	};
-	const userNameRegister = {required: {value: true, message: '* username is required'}, minLength: {value: 5, message: '* username must be more than 5 charachter'}, validate: (current) => current.includes('@')};
+	const emailRegister = {required: {value: true, message: '* email is required'}, minLength: {value: 5, message: '* email must be more than 5 charachter'}, validate: (current) => current.includes('@')};
 	const passwordRegister = {required: {value: true, message: '* password could not be empty'}, minLength: {value: 4, message: '* password should be greater than 4'}};
 	const clearLoginErrors = () => clearErrors('loginAuth');
 	return (
@@ -67,15 +66,16 @@ const Login = () => {
 					<div>
 						<FontAwesomeIcon icon={faInstagram} size={'3x'} />
 					</div>
-
+					{state?.message !== undefined ? <CsSpan color='green'>{state?.message}</CsSpan> : null}
+					{state?.error !== undefined ? <CsSpan color='red'>{state?.error}</CsSpan> : null}
 					<form onSubmit={handleSubmit(onValidSubmit, onInValidSubmit)}>
 						<CsErrors>
-							{errors.username?.type === 'validate' && <CsSpanF color={'red'} text='* email must include @' />}
-							{errors?.username?.message && <CsSpanF color={'red'} text={errors?.username?.message} />}
+							{errors.email?.type === 'validate' && <CsSpanF color={'red'} text='* email must include @' />}
+							{errors?.email?.message && <CsSpanF color={'red'} text={errors?.email?.message} />}
 						</CsErrors>
 						<CsErrors>{errors?.password?.message && <CsSpanF color={'red'} text={errors?.password?.message} />}</CsErrors>
 						<CsErrors>{errors?.loginAuth?.message && <CsSpanF color={'red'} text={errors?.loginAuth?.message} />}</CsErrors>
-						<CsInput {...register('username', userNameRegister)} type='text' placeholder='username' hasError={Boolean(errors?.username?.message)} onKeyDown={clearLoginErrors} />
+						<CsInput {...register('email', emailRegister)} type='text' placeholder='email' hasError={Boolean(errors?.email?.message)} onKeyDown={clearLoginErrors} />
 
 						<CsInput {...register('password', passwordRegister)} type='password' placeholder='password' hasError={Boolean(errors?.password?.message)} onKeyDown={clearLoginErrors} />
 
