@@ -2,6 +2,7 @@ import {useQuery} from '@apollo/client';
 import {useEffect, useState} from 'react';
 import Comments from '../components/Comments/Comments';
 import Photo from '../components/Photos/Photo';
+import Suggest from '../components/suggest/Suggest';
 import {SEE_FEED} from '../graphql/queries';
 import {PageTitle} from '../utils/PageTitle';
 
@@ -23,7 +24,7 @@ const Home = () => {
 		<>
 			<PageTitle title={'Instagram | Home'} />
 
-			{photos ? photos : 'No Feeds !'}
+			{photos?.length > 0 ? photos : <Suggest />}
 			{feeds?.length > 0 && <Comments />}
 		</>
 	);

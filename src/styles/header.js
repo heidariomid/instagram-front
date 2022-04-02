@@ -19,9 +19,11 @@ export const CsWrapper = styled.div`
 export const CsColumn = styled.div`
 	display: flex;
 	align-items: center;
+	cursor: pointer;
 `;
 export const CsSpan = styled.span`
 	margin-left: 15px;
+	cursor: pointer;
 `;
 export const CsButton = styled.button`
 	cursor: pointer;

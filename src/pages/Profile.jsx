@@ -1,19 +1,20 @@
-import {gql, useMutation, useQuery} from '@apollo/client';
-import {faComment, faHeart} from '@fortawesome/free-regular-svg-icons';
+import {useMutation, useQuery} from '@apollo/client';
+import {faComment, faHeart, faSquarePlus} from '@fortawesome/free-regular-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {useParams} from 'react-router-dom';
-import {TOGGLE_FOLLOW_STATUS} from '../graphql/mutations';
+import {TOGGLE_FOLLOW_STATUS, UPLOAD_PHOTO} from '../graphql/mutations';
 import {USER_PROFILE} from '../graphql/queries';
 import useUser from '../hooks/useUser';
-import {CsProfileAvatar, CsProfileButton, CsProfileColumn, CsProfileGrid, CsProfileHeader, CsProfileIcon, CsProfileIcons, CsProfileItem, CsProfileList, CsProfilePhoto, CsProfileRow, CsProfileUsername, CsProfileValue} from '../styles/Profile';
+import {client, uploadPhotoHandler} from '../services/uploadFile';
+import {CsIconButton, CsProfileAvatar, CsProfileButton, CsProfileColumn, CsProfileGrid, CsProfileHeader, CsProfileIcon, CsProfileIcons, CsProfileItem, CsProfileList, CsProfilePhoto, CsProfileRow, CsProfileUsername, CsProfileValue} from '../styles/Profile';
 import {PageTitle} from '../utils/PageTitle';
-
 const Profile = () => {
 	const {username} = useParams();
 	const {data: info} = useUser();
-
 	const {data, loading} = useQuery(USER_PROFILE, {variables: {username}});
+
 	const userInfo = data?.userProfile;
+	const [uploadPhoto] = useMutation(UPLOAD_PHOTO, {refetchQueries: [{query: USER_PROFILE, variables: {username}}]});
 
 	const updateFollowStatus = (cache, result) => {
 		const {isToggleSuccess} = result?.data?.toggleFollowStatus;
@@ -55,10 +56,10 @@ const Profile = () => {
 		return <div>{userInfo?.message} </div>;
 	}
 
-	const AvatarURL = userInfo?.user?.avatar.split('//');
+	const AvatarURL = userInfo?.user?.avatar;
 
-	const Buttom = ({handler, value}) => (
-		<CsProfileButton onClick={handler} isFollowing={userInfo?.user?.isFollowing}>
+	const Buttom = ({handler, value}, props) => (
+		<CsProfileButton onClick={handler} isFollowing={userInfo?.user?.isFollowing} {...props}>
 			{value}
 		</CsProfileButton>
 	);
@@ -77,13 +78,19 @@ const Profile = () => {
 		<div>
 			<PageTitle title={loading ? 'Loading....' : `${userInfo?.user?.userName}'s Profile`} />
 			<CsProfileHeader>
-				<CsProfileAvatar src={process.env.REACT_APP_PHOTO_URL + AvatarURL[1]} />
+				<CsProfileAvatar src={userInfo?.user?.avatar} />
+
 				<CsProfileColumn>
 					<CsProfileRow>
 						<CsProfileUsername>{userInfo?.user?.userName}</CsProfileUsername>
 					</CsProfileRow>
 					<CsProfileRow>
 						<CsProfileList>
+							<CsProfileItem>
+								<span>
+									<CsProfileValue>{userInfo?.user?.photos?.length}</CsProfileValue> posts
+								</span>
+							</CsProfileItem>
 							<CsProfileItem>
 								<span>
 									<CsProfileValue>{userInfo?.user?.totalFollowers}</CsProfileValue> follower
@@ -97,17 +104,20 @@ const Profile = () => {
 						</CsProfileList>
 					</CsProfileRow>
 
-					<CsProfileRow>{userInfo?.user?.bio}</CsProfileRow>
-					<CsProfileRow>{FollowButton(userInfo)}</CsProfileRow>
+					<CsProfileRow id='bio'>{userInfo?.user?.bio}</CsProfileRow>
+					<CsProfileRow>
+						{FollowButton(userInfo)}
+						<CsIconButton bgColor='rgb(36, 177, 179)' color='white' onClick={() => uploadPhotoHandler(uploadPhoto)}>
+							<span>Add Post </span>
+						</CsIconButton>
+					</CsProfileRow>
 				</CsProfileColumn>
 			</CsProfileHeader>
 
 			<CsProfileGrid>
 				{userInfo?.user?.photos?.map((photo) => {
-					const URL = photo?.file?.split('//');
-
 					return (
-						<CsProfilePhoto url={URL.length > 1 ? URL[1] : '13-no-image-available.jpg'} key={photo?.id}>
+						<CsProfilePhoto url={photo?.file} key={photo?.id}>
 							<CsProfileIcons>
 								<CsProfileIcon>
 									<FontAwesomeIcon icon={faHeart} />
@@ -127,3 +137,12 @@ const Profile = () => {
 };
 
 export default Profile;
+
+//  Promise {
+//   {
+//     filename: 'cat.jpg',
+//     mimetype: 'image/jpeg',
+//     encoding: '7bit',
+//     createReadStream: [Function: createReadStream]
+//   }
+// }

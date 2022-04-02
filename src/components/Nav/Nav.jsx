@@ -5,7 +5,7 @@ const CsNav = styled.nav`
 	width: 100%;
 	font-size: 12px;
 `;
-const Router = () => {
+const NavBar = () => {
 	return (
 		<CsNav>
 			<ul>
@@ -20,4 +20,4 @@ const Router = () => {
 	);
 };
 
-export default Router;
+export default NavBar;

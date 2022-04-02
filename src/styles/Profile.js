@@ -12,7 +12,11 @@ export const CsProfileColumn = styled.div`
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
-	align-items: flex-start;
+	align-items: center;
+	#bio {
+		align-self: flex-start;
+		margin-left: 20px;
+	}
 `;
 export const CsProfileAvatar = styled.img`
 	margin-left: 50px;
@@ -38,14 +42,28 @@ export const CsProfileButton = styled(CsButton).attrs({as: 'button'})`
 
 	background-color: ${({isFollowing, theme}) => (isFollowing ? 'darkGrey' : theme.buttonBlue)};
 `;
+export const CsIconButton = styled.button`
+	cursor: pointer;
+	width: 100px;
+	margin-top: 22px;
+	text-align: center;
+	padding: 8px 0px;
+	border: none;
+	font-weight: 500;
+	margin-left: 10px;
+	color: ${({color}) => color && color};
+	background-color: ${({bgColor, theme}) => (bgColor ? bgColor : theme.buttonBlue)};
+`;
 export const CsProfileList = styled.ul`
 	display: flex;
 `;
 export const CsProfileItem = styled.li`
 	margin-right: 20px;
+	margin-top: 10px;
 `;
 export const CsProfileValue = styled(CsBold)`
 	font-size: 18px;
+	padding-left: 10px;
 `;
 export const CsProfileName = styled(CsBold)`
 	font-size: 20;
@@ -58,7 +76,7 @@ export const CsProfileGrid = styled.div`
 	margin-top: 50px;
 `;
 export const CsProfilePhoto = styled.div`
-	background-image: url(${({url}) => process.env.REACT_APP_PHOTO_URL + url});
+	background-image: url(${({url}) => url});
 	background-size: cover;
 	position: relative;
 `;

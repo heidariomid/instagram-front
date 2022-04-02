@@ -13,13 +13,16 @@ export const PhotoHeader = styled.div`
 	padding: 15px;
 	display: flex;
 	align-items: center;
+	justify-content: space-between;
 `;
 export const CsImg = styled.img`
 	min-width: 100%;
 	height: 840px;
+	object-fit: cover;
+	object-position: 100%;
 	/* background-image: url(${({bg}) => bg}); */
-	/* background-size: cover; */
-	/* position: relative; */
+	background-size: cover;
+	position: relative;
 `;
 
 export const UserName = styled(CsBold)`
@@ -54,12 +57,9 @@ export const Likes = styled.span`
 `;
 
 export const CsPhoto = ({photo}) => {
-	if (photo?.file !== undefined) {
-		const URL = photo?.file?.split('//');
-		if (URL[1] !== undefined) {
-			return <CsImg key={photo?.id} src={process.env.REACT_APP_PHOTO_URL + URL[1]} alt={'photo'} />;
-		}
-
-		return <CsImg key={photo?.id} src={process.env.REACT_APP_PHOTO_URL + `${photo?.user?.id}-no-image-available.jpg`} alt={'photo'} />;
-	}
+	return (
+		<div>
+			<CsImg key={photo?.id} src={photo?.file} alt={'photo'} />
+		</div>
+	);
 };

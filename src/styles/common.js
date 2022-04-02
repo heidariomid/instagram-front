@@ -132,9 +132,7 @@ const CsImg = styled.img`
 
 export const CsAvatarF = ({url = '', size}) => {
 	if (url) {
-		const URL = url?.split('//');
-
-		return <CsImg size={size} src={'http://127.0.0.1:8887/' + URL[1]} alt={'avatar'} />;
+		return <CsImg size={size} src={url} alt={'avatar'} />;
 	}
 	return (
 		<CsSpan>

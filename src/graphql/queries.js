@@ -14,6 +14,16 @@ export const USER_QUERY = gql`
 		}
 	}
 `;
+export const USERS_QUERY = gql`
+	query {
+		users {
+			id
+			userName
+			avatar
+			isFollowing
+		}
+	}
+`;
 export const USER_PROFILE = gql`
 	query UserProfile($username: String!) {
 		userProfile(userName: $username) {

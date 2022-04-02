@@ -12,6 +12,6 @@
     "README.md": true,
     // "public": true,
     "package.json": true,
-    ".env": true
+    // ".env": true
   }
 }

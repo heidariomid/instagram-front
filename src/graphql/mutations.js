@@ -61,3 +61,20 @@ export const TOGGLE_FOLLOW_STATUS = gql`
 		}
 	}
 `;
+
+export const UPLOAD_PHOTO = gql`
+	mutation ($file: String!, $caption: String) {
+		uploadPhoto(file: $file, caption: $caption) {
+			file
+		}
+	}
+`;
+
+export const DELETE_PHOTO = gql`
+	mutation DeletePhoto($photoId: Int!) {
+		deletePhoto(id: $photoId) {
+			isPhotoDeleted
+			error
+		}
+	}
+`;
