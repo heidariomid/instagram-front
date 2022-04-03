@@ -4,7 +4,8 @@ export const isLoginVar = makeVar(Boolean(localStorage.getItem('token')));
 export const isDarkVar = makeVar(Boolean(localStorage.getItem('dark')));
 
 const httpLink = createHttpLink({
-	uri: 'https://studio.apollographql.com/graph/Instagram-Deployed/explorer?variant=current',
+	uri: 'https://radiant-citadel-35575.herokuapp.com/graphql',
+	// uri: 'http://localhost:4000/graphql',
 });
 const authLink = setContext((_, {headers}) => {
 	const token = localStorage.getItem('token');
